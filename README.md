@@ -15,10 +15,10 @@ Weewx must be set up and use MySQL/MariaDB. The default is SQLite, but you can e
 ### Step 1: Installing MySQL & The Corresponding Python Library
 ```bash
 sudo apt update
-sudo apt install mariadb-client python3-mysqldb
+sudo apt install mariadb-client mariadb-server python3-mysqldb
 ```
 ### Step 2: Securing MySQL (Optional)
-Optionally you can secure your MySQL client by setting the root user's password.
+Optionally you can secure your MySQL by setting the root user's password.
 Run the following command to do so. It is recommended to answer "Y" (yes) to all questions.
 
 ```bash
@@ -32,12 +32,12 @@ sudo mysql -u root -p
 ```
 After executing this command (and entering your sudo password), you need to enter the root user's password. If you skipped step 2 there is no password, so just press [ENTER].
 ### Step 4: Giving Permissions To Weewx
-Normally weewx logs in to the mysql client with the user "weewx" and the password "weewx" to store the weather data in the database "weewx". To make this possible, we have to create the weewx user and give him the necessary rights.
+Normally weewx logs in to mysql with the user "weewx" and the password "weewx" to store the weather data in the database "weewx". To make this possible, we have to create the weewx user and give him the necessary rights.
 ```mysql
 mysql> CREATE USER 'weewx'@'localhost' IDENTIFIED BY 'weewx';
 mysql> GRANT select, update, create, delete, insert, drop ON weewx.* TO weewx@localhost;
 ```
-After that we're done with configuring the mysql client and are ready to tell weewx. But first we exit the mysql client using this small command.
+After that we're done with configuring mysql and are ready to tell weewx. But first we exit using this small command.
 
 ```mysql
 mysql> quit;
@@ -73,7 +73,7 @@ some command (work still in progress)
 
 ### Step 2: Giving Permissions
 
-Normally the  transmitter logs in to the mysql client with the user "transmitter" and the password "transmitter" to read the weather data from the database "weewx". To make this possible, we have to create the user and give him the necessary rights. 
+Normally the  transmitter logs in to mysql with the user "transmitter" and the password "transmitter" to read the weather data from the database "weewx". To make this possible, we have to create the user and give him the necessary rights. 
 
 ```bash
 sudo mysql -u root -p
@@ -91,31 +91,28 @@ Just create an empty MySQL database on the server.  There should be an user that
 
 ### Step 4: Configuring The Transmitter
 
-The MySQL transmitter needs to know which server to transmit the weather data to. To do this, it also needs to know how to log into the database on the MySQL server. For this we have to edit the server configuration file of the transmitter.
+The MySQL transmitter needs to know which server to transmit the weather data to. To do this, it also needs to know how to log into the database on the MySQL server. For this we have to edit the transmitter's configuration file.
 
 ```bash
-sudo nano /etc/weewxTransmitter/server.conf
+sudo nano /etc/weewxTransmitter/config.yaml
 ```
 
-Now set the `host`, `username` and `password`.
+Now go to `connectionToServer`and set the `host`, `username` and `password`.
 
 *Example*:
 
+```yaml
+settings:
+    connectionToServer:
+        host: your.host.address
+        username: yourusername
+        password: yourpassword
+ (...)
 ```
-host=my.host.address
-username=myCustomUser
-password=myCustomPassword
-```
+Optionally we are able to change the transmission interval.
+You can do this by changing the `transmission_interval` variable to any desired value. Everything from one second (e.g. `1s`), to several minutes (e.g. `5m`), to hours (e.g. `12h`) or days (e.g. `5d`) is valid. If you want live updates set the value to `LIVE`. This should be the default value. The transmitter will only transmit data if there is any. Therefore the `transmission_interval` is the minimum time it takes until a new dataset is sent.
+Press [CTRL] + [X] to exit the configuration file, answer "y" (yes) to save the changes.
 
-### Step 5: Additional Settings (Optional)
-
-Additionally we are able to change the transmission interval. For this we have to edit the transmitter's client configuration file.
-
-```bash
-sudo nano /etc/weewxTransmitter/client.conf
-```
-
-Now set the `transmission_interval` to the desired value. Everything from one second (e.g. `1s`), to several minutes (e.g. `5m`), to hours (e.g. `12h`) or days (e.g. `5d`) is valid. If you want live updates set the value to `LIVE`. This should be the default value. The transmitter will only transmit data if there is any. Therefore the `transmission_interval` is the minimum time it takes until a new dataset is sent.
 ### Step 6: Running The Transmitter as Daemon
 Finally we are now able to run the transmitter:
 ```bash
