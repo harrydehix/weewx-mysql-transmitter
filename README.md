@@ -4,7 +4,7 @@ The following picture shows the concept behind it.
 
 <hr>
 
-<img src="images/transmitter.png" alt="Conc" style="zoom:90%;" />
+<img src="images/concept.png" alt="Conc" style="zoom:90%;" />
 
 <hr>
 
