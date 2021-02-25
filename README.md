@@ -98,6 +98,8 @@ sudo nano /etc/weewxTransmitter/config.yaml
 ```
 
 Now go to `connectionToServer`and set the `host`, `username` and `password`.
+Optionally we are able to change the transmission interval.
+You can do this by changing the `transmissionInterval` variable to any desired value. Everything from one second (e.g. `1s`), to several minutes (e.g. `5m`), to hours (e.g. `12h`) or days (e.g. `5d`) is valid. If you want live updates set the value to `LIVE`. This should be the default value. The transmitter will only transmit data if there is any. Therefore the `transmission_interval` is the minimum time it takes until a new dataset is sent.
 
 *Example*:
 
@@ -107,10 +109,10 @@ settings:
         host: your.host.address
         username: yourusername
         password: yourpassword
+        transmissionInterval: LIVE
  (...)
 ```
-Optionally we are able to change the transmission interval.
-You can do this by changing the `transmission_interval` variable to any desired value. Everything from one second (e.g. `1s`), to several minutes (e.g. `5m`), to hours (e.g. `12h`) or days (e.g. `5d`) is valid. If you want live updates set the value to `LIVE`. This should be the default value. The transmitter will only transmit data if there is any. Therefore the `transmission_interval` is the minimum time it takes until a new dataset is sent.
+
 Press [CTRL] + [X] to exit the configuration file, answer "y" (yes) to save the changes.
 
 ### Step 5: Running The Transmitter as Daemon
