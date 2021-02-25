@@ -1,5 +1,12 @@
 # Weewx MySQL Transmitter
 Small python addon to [weewx](https://github.com/weewx/weewx) to transfer the data weewx stores in a mysql database to a public mysql server. 
+The following picture shows the concept behind it.
+
+<hr>
+
+<img src="images/transmitter.png" alt="Conc" style="zoom:90%;" />
+
+<hr>
 
 <span style="color:red">**Attention!**</span>
 
